@@ -19,7 +19,105 @@ public final class ItemDefinitions implements Definitions, Clonable {
     if (definitions = null) {
       return 0;
     }
-    // JSONCCDefinitionLoader
+    JSONCCDefinitionLoader ccPrice = JSONCCDefinitionLoader.lookUp(id);
+     return ccPrice != null && ccPrice.getPrice() != 0 ? ccPrice.getPrice() : definitions .getPrice();
   }
+
+  @Override
+  public void load() {
+    Cache cache = Game.getCacheMGI();
+    Archive configs = cache.getArchive(ArchiveType.CONFIGS);
+    Group items = configs.findGroupByID(GroupType.ITEM);
+    definitions = new ItemDefinitions[items.getHighestFileId()];
+    for (ind id = 0; id < items.getHighestFileId(); id++) {
+      File file = items.findFileByID(id);
+      if (file == null) {
+        continue;
+      }
+      definitions[id] = new ItemDefinitions(id, buffer);
+      definitions[id].generateSkippedSlots();
+      for (int id = 0; id < items.getHighestFieldId(); id++) {
+        ItemDefinitions defs = get(id);
+        if (defs == null || defs.notedTemplate == -1) {
+          continue;
+        }
+        defs.toNote();
+      }
+      GameEngine.appendPostLoadTask(() -> PluginManager.post(new ItemDefinitionsLoadEvent()));
+  }
+   public static boolean isValid(final int id) { return id >= 0 && id < definitions.length; }
+   public static bolean isInvalid(final int id) { return id < 0 || id >= definitions.length; }
+
+   public final List<String> printFields() {
+     find List<String> strings = new ArrayList<>(getClass().getDeclaredFields().length);
+     for (final Field field : getClass().getDeclaredFields()) {
+       if ((field.getModifiers() & 8) != 0) {
+         continue;
+       }
+       try {
+         final Object val = getValue(field);
+         if (val == DEFAULT) {
+           continue;
+         }
+         final String[] fieldName = field.getName().split("(?=[A-Z]");
+         final StringBuilder fieldBuilder = new StringBuilder();
+         fieldBuilder.append(Utils.formatString(fieldName[0]));
+         for (int i = 1; i < fieldName.length; i++) {
+            fieldBuilder.append(" " + (fieldName[i].length() == 1 ? fieldName[i].toUpperCase() : fieldName[i].toLowerCase();
+         }
+         strings.add(fieldBuilder.toString() + ": " + val);
+       } catch(final Throwable e) {
+         log.error(Strings.EMPTY, e);
+     }
+     return strings;
+   }
+
+   private final Object getValue(final Field field) throws Throwable {
+    field.setAccessible(true);
+    final Class<?> type = field.getType();
+
+    if (field.get(this) == null || field.get(this).equals(DEFAULT.getClass().getDeclaredField(field.getName()).get(DEFAULT))) {
+      return DEFAULT; 
+    }
+
+    if (type == int[][].class) {
+      return Arrays.toString((int[][]) field.get(this));
+    } else if (type == int[].class) {
+      return Arrays.toString((int[]) field.get(this));
+    } else if (type == byte[].class) {
+      return Arrays.toString((byte[]) field.get(this));
+    } else if (type == short[].class) {
+      return Arrays.toString((short[]) field.get(this));
+    } else if (type == double[].class) {
+      return Arrays.toString((double[]) field.get(this));
+    } else if (type == float[].class) {
+      return Arrays.toString((float[]) field.get(this));
+    } else if (type == String[].class) {
+      if (field.get(this) == null) {
+        return "null";
+      }
+      return "[" + String.join(", ", (String[]) field.get(this)) + "]"; 
+    } else if (type == Object[].class) {
+      return Arrays.toString((Object[]) field.get(this));
+    }
+    return field.get(this);
+  }
+
+  private String name;
+  public String getName() { return name; }
+  public void setName(String name) { this.name = name; }
+
+  private transient String lowercaseName;
+  public String getLowerCaseName() { return lowercaseName; }
+
+  private int id;
+  public int getId() { return id; }
+  public void setId(int id) { this.id = id; }
+  
+
+  private String[] inventoryOptions;
+  public String[] getInventoryOptions() { return inventoryOptions; }
+  public void setInventoryOptions(String[] inventoryOptions) { this.inventoryOptions = inventoryOptions; }
+
 
 }
