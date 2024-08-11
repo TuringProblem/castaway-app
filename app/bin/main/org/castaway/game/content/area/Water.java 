@@ -1,3 +1,5 @@
+import java.util.function;
+
 public class Water { 
   private int temp;
   private int tide;
@@ -26,5 +28,10 @@ public class Water {
     this.tide = tide;
     this.phLevel = phLevel;
   }
+
+  //TODO: need to create a optional for acidity.
   //is there a storm??
+  //Optional<I   
+
+  
 }
