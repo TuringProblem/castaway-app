@@ -20,7 +20,7 @@ public final class ItemDefinitions implements Definitions, Clonable {
       return 0;
     }
     JSONCCDefinitionLoader ccPrice = JSONCCDefinitionLoader.lookUp(id);
-     return ccPrice != null && ccPrice.getPrice() != 0 ? ccPrice.getPrice() : definitions .getPrice();
+    return ccPrice != null && ccPrice.getPrice() != 0 ? ccPrice.getPrice() : definitions.getPrice();
   }
 
   @Override
@@ -45,10 +45,16 @@ public final class ItemDefinitions implements Definitions, Clonable {
       }
       GameEngine.appendPostLoadTask(() -> PluginManager.post(new ItemDefinitionsLoadEvent()));
   }
-   public static boolean isValid(final int id) { return id >= 0 && id < definitions.length; }
-   public static bolean isInvalid(final int id) { return id < 0 || id >= definitions.length; }
 
-   public final List<String> printFields() {
+  public static boolean isValid(final int id) {
+    return id >= 0 && id < definitions.length;
+  }
+
+  public static bolean isInvalid(final int id) {
+    return id < 0 || id >= definitions.length;
+  }
+
+  public final List<String> printFields() {
      find List<String> strings = new ArrayList<>(getClass().getDeclaredFields().length);
      for (final Field field : getClass().getDeclaredFields()) {
        if ((field.getModifiers() & 8) != 0) {
@@ -63,7 +69,7 @@ public final class ItemDefinitions implements Definitions, Clonable {
          final StringBuilder fieldBuilder = new StringBuilder();
          fieldBuilder.append(Utils.formatString(fieldName[0]));
          for (int i = 1; i < fieldName.length; i++) {
-            fieldBuilder.append(" " + (fieldName[i].length() == 1 ? fieldName[i].toUpperCase() : fieldName[i].toLowerCase();
+            fieldBuilder.append(" " + (fieldName[i].length() == 1 ? fieldName[i].toUpperCase() : fieldName[i].toLowerCase()));
          }
          strings.add(fieldBuilder.toString() + ": " + val);
        } catch(final Throwable e) {
@@ -72,12 +78,13 @@ public final class ItemDefinitions implements Definitions, Clonable {
      return strings;
    }
 
-   private final Object getValue(final Field field) throws Throwable {
+  private final Object getValue(final Field field) throws Throwable {
     field.setAccessible(true);
     final Class<?> type = field.getType();
 
-    if (field.get(this) == null || field.get(this).equals(DEFAULT.getClass().getDeclaredField(field.getName()).get(DEFAULT))) {
-      return DEFAULT; 
+    if (field.get(this) == null
+        || field.get(this).equals(DEFAULT.getClass().getDeclaredField(field.getName()).get(DEFAULT))) {
+      return DEFAULT;
     }
 
     if (type == int[][].class) {
@@ -96,7 +103,7 @@ public final class ItemDefinitions implements Definitions, Clonable {
       if (field.get(this) == null) {
         return "null";
       }
-      return "[" + String.join(", ", (String[]) field.get(this)) + "]"; 
+      return "[" + String.join(", ", (String[]) field.get(this)) + "]";
     } else if (type == Object[].class) {
       return Arrays.toString((Object[]) field.get(this));
     }
@@ -104,20 +111,90 @@ public final class ItemDefinitions implements Definitions, Clonable {
   }
 
   private String name;
-  public String getName() { return name; }
-  public void setName(String name) { this.name = name; }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
 
   private transient String lowercaseName;
-  public String getLowerCaseName() { return lowercaseName; }
+
+  public String getLowerCaseName() {
+    return lowercaseName;
+  }
 
   private int id;
-  public int getId() { return id; }
-  public void setId(int id) { this.id = id; }
-  
+
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
+  }
 
   private String[] inventoryOptions;
-  public String[] getInventoryOptions() { return inventoryOptions; }
-  public void setInventoryOptions(String[] inventoryOptions) { this.inventoryOptions = inventoryOptions; }
 
+  public String[] getInventoryOptions() {
+    return inventoryOptions;
+  }
+
+  public void setInventoryOptions(String[] inventoryOptions) {
+    this.inventoryOptions = inventoryOptions;
+  }
+
+  // boolean isMember
+  // boolean Exchange
+  // int isStackable
+  private int price;
+
+  public int getPrice() {
+    return price;
+  }
+
+  public void setPrice(int price) {
+    this.price = price;
+  }
+
+  private int notedTemplate;
+
+  public int getNotedTemplate() {
+    return notedTemplate;
+  }
+
+  public void setNotedTemplate(int notedTemplate) {
+    this.notedTemplate = notedTemplate;
+  }
+
+  private int noteId;
+
+  public int getNotedId() {
+    return noteId;
+  }
+
+  public void setNoteId(int noteId) {
+    this.noteId = noteId;
+  }
+
+  private int bindId;
+
+  public void setBindId(int bindId) {
+    this.bindId = bindId;
+  }
+  
+  private int placeholderTemplate;
+  private int getPlaceHolderTemplate() { reurn placeholderTemplate; }
+  private void setPlaceHolderTemplate(int placeholderTemplate) { this.placeholderTemplate = placeholderTemplate; }
+
+  private int[] stackIds; 
+  public int getStackIds() { return stackIds; } 
+  public void setStackIds(int[] stackIds) { this.stackIds = stackIds; }
+
+  private int[] stackAmounts;
+  public int getStackAmounts() { return stackAmounts; }
+  public void setStackAmounts(int[] stackAmounts) { this.stackAmounts = stackAmounts; }
 
 }
