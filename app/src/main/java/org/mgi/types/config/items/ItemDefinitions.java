@@ -196,5 +196,10 @@ public final class ItemDefinitions implements Definitions, Clonable {
   private int[] stackAmounts;
   public int getStackAmounts() { return stackAmounts; }
   public void setStackAmounts(int[] stackAmounts) { this.stackAmounts = stackAmounts; }
-
+  //figure out the remaining things that I need from the Itmes in game...
+  
+  private short[] originalColors;
+  public short[] getOriginalColors() { return originalColors ; }
+  public void setOriginalColors(short[] originalColors) { this.originalColors = originalColors; }
+  
 }
