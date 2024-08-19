@@ -1,8 +1,15 @@
 package com.game.systems;
 
+import discord4j.core.event.domain.interaction.SlashCommandEvent;
+import reactor.core.publisher.Mono;
 import com.castaway.game.util.Types.Rarity;
 
 public class FishingSystem {
+
+  public Mono<void> process(Entity player, SlashCommandEvent) {
+
+  }
+
   public void process(Entity player) {
     if (player.hasComponent(LocationComponent.class) && player.hasComponent(FishingRodComponent.class)
         && player.hasComponent(BaitComponent.class)) {
