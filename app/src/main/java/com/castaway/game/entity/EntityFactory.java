@@ -10,22 +10,24 @@ import com.castaway.game.entity.components.XPComponent;
 import com.castaway.game.entity.components.fish.Card;
 
 public class EntityFactory {
-  public static Entity createFishEntity(String species, Rarity rarity) {
-    Entity fish = new Entity();
+  public static Entity createPlayerEntity(String playerName, int initialCurrency,
+      int initialLevel, int initialXp, int inventoryCapacity) {
+    return new EntityBuilder().withName(playerName).withPosition(0, 0).withInventory(inventoryCapacity)
+        .withXP(initialLevel, initialXp /* add the algorithm to calculate when the next level is */)
+        .withCurrency(initialCurrency).build();
 
-    fish.addComponent(PositionComponent.class, new PositionComponent(0, 0));
-    // fish.addComponent(Card.class, new Card(species, rarity,
-    // calculateFishValue(rarity), "imageURL", 1, generateCardNumber()));
-    return fish;
+  }
+
+  public static Entity createFishEntity(String species, Rarity rarity) {
+    return new EntityBuilder().withPosition(0, 0).withFishDetails(species, rarity, calculateFishValue(rairty),
+        "add the imageURL here this will be the json file", 1, generateCardNumber()).build();
   }
 
   private static int calculateFishValue(Rarity rarity) {
-    return switch (rarity) {
-      // add the cases here
-    };
+    return switch(rarity) {
+
+      default -> ;
+    }
   }
 
-  private static String generateCardNumber() {
-    return UUID.randomUUID().toString();
-  }
 }
